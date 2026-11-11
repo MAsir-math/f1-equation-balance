@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Both sides｜馬Sir教室</title>
+<!--
+  KaTeX (MIT) via jsDelivr, suitable for Hong Kong classroom networks.
+  Fallback (comment only): https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.21/katex.min.css
+                       and https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.21/katex.min.js
+-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc@5.2.9/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc@5.2.9/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-tc@5.2.9/700.css">
+<style>
+/* 1440 canvas: 24px + (minmax(0,1.15fr) + 16px + minmax(0,0.85fr)) + 24px. Phone: 16px margins, stacked. */
+:root {
+  --ground: #e8ece6;
+  --surface: #f7f8f6;
+  --ink: #1c1d1a;
+  --muted: #4a524c;
+  --faint: #5a635c;
+  --line: #cfd6ce;
+  --rule: #e2e7e0;
+  --control: #8b958c;
+  --primary: #1c1d1a;
+  --accent: #1a5c45;
+  --eq-bg: #e3efe8;
+  --eq-ink: #0e3a2a;
+  --uneq-bg: #f8e8e7;
+  --uneq-ink: #7a1b1f;
+  --neg: #8f1e22;
+  --pos: #1a5c45;
+  --warn-bg: #fff6dc;
+  --warn-ink: #6b4a00;
+  --warn-line: #e6d08a;
+  --weight: #3a4148;
+  --weight-shine: #5b646c;
+  --box: #efe8d6;
+  --box-edge: #c4b896;
+  --brass: #8a6a32;
+  --brass-dark: #6c5224;
+  --beam: #2c2e2a;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --gap: 16px;
+  --pad: 20px;
+  --ctrl-h: 44px;
+  --font: "Noto Sans TC", "Noto Sans", "Source Han Sans TC", "PingFang HK", "Microsoft JhengHei", sans-serif;
+  --shadow-float: 0 8px 24px rgba(28, 29, 26, 0.12);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--ground); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.45; }
+body { min-height: 100dvh; }
+::selection { background: #c8ddd3; color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button, input { font-family: inherit; }
+button { cursor: pointer; }
+.num { font-variant-numeric: tabular-nums; }
+
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100dvh;
+}
+
+/* Header */
+.top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.mark {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.brand-text h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.brand-text .sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.modes {
+  display: inline-flex;
+  background: #dde3db;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+.modes button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+.modes button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--ink);
+}
+.modes button:hover { color: var(--ink); }
+
+.prompt {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ink);
+  max-width: 75ch;
+}
+.prompt strong { font-weight: 700; }
+
+/* Main grid */
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 16px;
+  align-items: start;
+  flex: 1;
+}
+.stage, .side {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px 18px;
+}
+.stage { min-height: 420px; display: flex; flex-direction: column; }
+.panel-label {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* Equilibrium chip — status, not an eyebrow over a heading */
+.status {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.status .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.status.eq { background: var(--eq-bg); color: var(--eq-ink); }
+.status.uneq { background: var(--uneq-bg); color: var(--uneq-ink); }
+
+/* Scale */
+.scale-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 340px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 8px 4px 0;
+}
+.scale {
+  --tilt: 0deg;
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  height: 340px;
+}
+.scale-base {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 168px;
+  height: 14px;
+  transform: translateX(-50%);
+  background: #3e4540;
+  border-radius: 3px 3px 6px 6px;
+}
+.scale-stem {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: 14px;
+  height: 92px;
+  transform: translateX(-50%);
+  background: linear-gradient(#4a524c, #2c322e);
+  border-radius: 2px;
+}
+.fulcrum {
+  position: absolute;
+  left: 50%;
+  bottom: 102px;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-bottom: 28px solid var(--brass);
+  z-index: 3;
+  filter: drop-shadow(0 1px 0 var(--brass-dark));
+}
+.beam-group {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 118px;
+  height: 200px;
+  transform: rotate(var(--tilt));
+  transform-origin: 50% 100%;
+  transition: transform 0.45s cubic-bezier(.2,.75,.2,1);
+}
+.beam {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 0;
+  height: 10px;
+  background: var(--beam);
+  border-radius: 5px;
+  z-index: 2;
+}
+.beam::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  background: var(--brass);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--brass-dark);
+}
+.hook {
+  position: absolute;
+  bottom: 10px;
+  width: 42%;
+  transform: rotate(calc(-1 * var(--tilt)));
+  transform-origin: 50% 0;
+  transition: transform 0.45s cubic-bezier(.2,.75,.2,1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hook-left { left: 4%; }
+.hook-right { right: 4%; }
+.strings {
+  width: 2px;
+  height: 36px;
+  background: #6a736c;
+  position: relative;
+}
+.strings::before, .strings::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 36px;
+  background: #6a736c;
+}
+.strings::before { left: -22px; transform: rotate(14deg); transform-origin: top; }
+.strings::after { right: -22px; left: auto; transform: rotate(-14deg); transform-origin: top; }
+.pan {
+  width: 100%;
+  max-width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.bowl {
+  width: 100%;
+  height: 16px;
+  background: #c5b58a;
+  border: 2px solid #6c5224;
+  border-top: 0;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  position: relative;
+  z-index: 1;
+}
+.bowl::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px; top: -4px;
+  height: 6px;
+  background: #d8c9a0;
+  border: 2px solid #6c5224;
+  border-radius: 3px;
+}
+.pan-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 6px;
+  min-height: 64px;
+  padding: 0 8px 0;
+  margin-bottom: -2px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+.pan-caption {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.token-box, .token-w, .token-neg, .token-compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+}
+.token-box {
+  width: 44px;
+  height: 36px;
+  background: var(--box);
+  border: 1.5px solid var(--box-edge);
+  border-radius: 3px;
+  color: var(--ink);
+  font-size: 18px;
+  font-style: italic;
+  box-shadow: inset 0 -3px 0 rgba(120, 100, 50, 0.18);
+}
+.token-box.is-neg {
+  background: var(--uneq-bg);
+  border-color: #d8a8a8;
+  color: var(--neg);
+}
+.token-w {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--weight-shine), var(--weight));
+  color: #f3f4f2;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-align: center;
+  padding: 0 2px;
+  border: 1px solid #2a3036;
+}
+.token-neg {
+  min-width: 36px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--uneq-bg);
+  color: var(--neg);
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid #e3b4b2;
+}
+.token-compact {
+  min-width: 52px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 4px;
+  background: #e7ebe4;
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  font-style: italic;
+}
+.pan-empty {
+  font-size: 12px;
+  color: var(--faint);
+  padding-bottom: 8px;
+}
+
+/* Workbench (practice / compare) */
+.workbench {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  min-height: 280px;
+  padding: 12px 8px 8px;
+}
+.wb-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+.wb-side {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 14px;
+  background: #fff;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wb-side .k {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.wb-expr { font-size: 22px; min-height: 40px; display: flex; align-items: center; }
+.wb-expr .katex { font-size: 1.15em; }
+.wb-sign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  min-width: 36px;
+  color: var(--accent);
+}
+.wb-sign.uneq { color: var(--neg); }
+.term-pos { color: var(--ink); }
+.term-neg { color: var(--neg); }
+
+/* Side column */
+.eq-now {
+  margin: 0 0 12px;
+  min-height: 48px;
+  font-size: 22px;
+}
+.eq-now .katex { font-size: 1.25em; }
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+  max-height: 220px;
+  overflow: auto;
+}
+.steps li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+.steps li .op { color: var(--muted); display: block; font-size: 13px; margin-bottom: 2px; }
+.steps .empty { color: var(--faint); border: 0; padding: 10px 0; }
+.check {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.check h2 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.check-body { font-size: 15px; }
+.check-body p { margin: 0 0 6px; }
+.check-ok {
+  margin-top: 8px;
+  color: var(--eq-ink);
+  font-weight: 600;
+}
+.question-box {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.question-box p { margin: 0 0 10px; font-weight: 600; }
+.q-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.shorthand {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+}
+.shorthand h2 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+.shorthand p { margin: 0 0 8px; font-size: 14px; }
+.principle {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--eq-bg);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+.principle p { margin: 0 0 8px; }
+.principle p:last-child { margin: 0; }
+.msg {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--warn-ink);
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.msg[hidden], [hidden] { display: none !important; }
+
+/* Practice picker */
+.picker {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.picker button {
+  flex: none;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.picker button[aria-current="true"] {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.picker button.is-done { color: var(--accent); }
+.picker button.is-done[aria-current="true"] { color: #fff; }
+
+/* Operations */
+.ops {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 14px 14px;
+  display: grid;
+  gap: 10px;
+}
+.ops-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+}
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.op-set, .where-set { display: flex; gap: 6px; flex-wrap: wrap; }
+.op-btn, .where-btn, .chip, .ghost, .apply, .yesno {
+  height: var(--ctrl-h);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 0 12px;
+  min-width: 44px;
+  /* Uiverse-inspired press (MIT): solid face + short ground shadow, no glass */
+  box-shadow: 0 2px 0 #c3cac0;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.op-btn:hover, .where-btn:hover, .chip:hover, .ghost:hover, .yesno:hover {
+  border-color: var(--control);
+}
+.op-btn:active, .where-btn:active, .chip:active, .ghost:active, .apply:active, .yesno:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 #c3cac0;
+}
+.op-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  padding: 0;
+  line-height: 1.05;
+  height: 52px;
+}
+.op-btn .sym { font-size: 20px; font-weight: 700; }
+.op-btn .word { font-size: 10px; font-weight: 600; color: var(--muted); }
+.op-btn[aria-pressed="true"], .where-btn[aria-pressed="true"], .chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: 0 2px 0 #0b0c0a;
+}
+.op-btn[aria-pressed="true"] .word { color: #d7ddd6; }
+.where-btn[aria-pressed="true"][data-where="both"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 2px 0 #0e3a2a;
+  color: #fff;
+}
+.apply {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 3px 0 #0b0c0a;
+  padding: 0 22px;
+  height: 52px;
+  font-size: 16px;
+}
+.apply:active { box-shadow: 0 0 0 #0b0c0a; }
+.yesno.primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 0 #0b0c0a;
+}
+input[type="text"] {
+  height: var(--ctrl-h);
+  width: 132px;
+  border: 1px solid var(--control);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  padding: 0 10px;
+  font-size: 16px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { height: 36px; min-width: 40px; box-shadow: 0 1px 0 #c3cac0; font-variant-numeric: tabular-nums; }
+.util { margin-left: auto; display: flex; gap: 6px; }
+.ghost { background: #fff; }
+.hint { margin: 0; font-size: 12px; color: var(--muted); }
+
+/* Teacher tip */
+details.tip {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+details.tip summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 13px;
+}
+details.tip .tip-body { margin-top: 8px; max-width: 75ch; }
+details.tip p { margin: 0 0 8px; }
+details.tip p:last-child { margin: 0; }
+
+.foot {
+  font-size: 12px;
+  color: var(--faint);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+.foot p { margin: 0; }
+
+@media (max-width: 880px) {
+  .app { padding: 12px 16px 24px; gap: 12px; }
+  .main { grid-template-columns: 1fr; }
+  .stage { min-height: 0; }
+  .scale { height: 300px; }
+  .scale-wrap { min-height: 300px; }
+  .util { margin-left: 0; }
+  .eq-now { font-size: 20px; }
+  .prompt { font-size: 15px; }
+}
+@media (max-width: 520px) {
+  .brand-text h1 { font-size: 20px; }
+  .op-btn { width: 56px; }
+  input[type="text"] { width: 108px; }
+  .hook-left, .hook-right { width: 46%; }
+  .token-box { width: 38px; height: 32px; font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beam-group, .hook, .op-btn, .where-btn, .chip, .ghost, .apply, .yesno {
+    transition: none;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+        <rect x="13" y="26" width="10" height="3.5" rx="1" fill="currentColor"/>
+        <rect x="16.5" y="16" width="3" height="10" fill="currentColor"/>
+        <path d="M8 16h20l-2 3H10l-2-3z" fill="currentColor"/>
+        <path d="M18 9l5 7h-10l5-7z" fill="currentColor"/>
+        <rect x="6" y="7" width="10" height="2.2" rx="1" fill="currentColor"/>
+        <rect x="20" y="7" width="10" height="2.2" rx="1" fill="currentColor"/>
+      </svg>
+      <div class="brand-text">
+        <h1>Both sides</h1>
+        <p class="sub">馬Sir教室 · Form 1 · Ch.4 Linear Equations in One Unknown（一元一次方程）</p>
+      </div>
+    </div>
+    <div class="modes" role="tablist" aria-label="Mode">
+      <button type="button" id="mode-guided" role="tab" aria-pressed="true">Guided (Activity 4.1)</button>
+      <button type="button" id="mode-practice" role="tab" aria-pressed="false">Practice</button>
+    </div>
+  </header>
+
+  <p class="prompt" id="prompt"></p>
+
+  <div class="main">
+    <section class="stage" aria-label="Main stage">
+      <p class="panel-label" id="stage-label">Balance scale（天秤）</p>
+      <div class="status eq" id="eq-status"><span class="dot"></span><span id="eq-status-text">in equilibrium（平衡）</span></div>
+      <div class="scale-wrap" id="scale-view">
+        <div class="scale" id="scale">
+          <div class="beam-group">
+            <div class="hook hook-left">
+              <div class="strings"></div>
+              <div class="pan">
+                <div class="pan-items" id="pan-left"></div>
+                <div class="bowl"></div>
+                <div class="pan-caption">L.H.S.</div>
+              </div>
+            </div>
+            <div class="hook hook-right">
+              <div class="strings"></div>
+              <div class="pan">
+                <div class="pan-items" id="pan-right"></div>
+                <div class="bowl"></div>
+                <div class="pan-caption">R.H.S.</div>
+              </div>
+            </div>
+            <div class="beam"></div>
+          </div>
+          <div class="fulcrum" aria-hidden="true"></div>
+          <div class="scale-stem"></div>
+          <div class="scale-base"></div>
+        </div>
+      </div>
+      <div class="workbench" id="workbench-view" hidden>
+        <div class="wb-row">
+          <div class="wb-side">
+            <div class="k">L.H.S.（左邊）</div>
+            <div class="wb-expr" id="wb-left"></div>
+          </div>
+          <div class="wb-sign" id="wb-sign">=</div>
+          <div class="wb-side">
+            <div class="k">R.H.S.（右邊）</div>
+            <div class="wb-expr" id="wb-right"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side" aria-label="Equation and steps">
+      <div class="picker" id="picker" hidden></div>
+      <p class="panel-label">Equation（方程）</p>
+      <div class="eq-now" id="eq-now"></div>
+      <p class="panel-label">Steps（步驟）</p>
+      <ol class="steps" id="steps"></ol>
+      <div id="question" class="question-box" hidden></div>
+      <div id="check" class="check" hidden></div>
+      <div id="shorthand" class="shorthand" hidden></div>
+      <div id="principle" class="principle" hidden></div>
+      <div id="msg" class="msg" hidden></div>
+    </aside>
+  </div>
+
+  <section class="ops" aria-label="Operation bar">
+    <div class="ops-row">
+      <div class="field">
+        <span>Operation（運算）</span>
+        <div class="op-set" role="group" aria-label="Operation">
+          <button type="button" class="op-btn" data-op="add" aria-pressed="false"><span class="sym">+</span><span class="word">Add</span></button>
+          <button type="button" class="op-btn" data-op="sub" aria-pressed="true"><span class="sym">−</span><span class="word">Subtract</span></button>
+          <button type="button" class="op-btn" data-op="mul" aria-pressed="false"><span class="sym">×</span><span class="word">Multiply</span></button>
+          <button type="button" class="op-btn" data-op="div" aria-pressed="false"><span class="sym">÷</span><span class="word">Divide</span></button>
+        </div>
+      </div>
+      <div class="field">
+        <span>Number（數）</span>
+        <input type="text" id="num" inputmode="text" autocomplete="off" spellcheck="false" value="1" aria-label="Number">
+      </div>
+      <div class="field" style="flex:1">
+        <span>Quick values</span>
+        <div class="chips" id="chips"></div>
+      </div>
+    </div>
+    <div class="ops-row">
+      <div class="field">
+        <span>Apply to（應用於）</span>
+        <div class="where-set" role="group" aria-label="Apply to">
+          <button type="button" class="where-btn" data-where="both" aria-pressed="true">Both sides</button>
+          <button type="button" class="where-btn" data-where="left" aria-pressed="false">L.H.S.</button>
+          <button type="button" class="where-btn" data-where="right" aria-pressed="false">R.H.S.</button>
+        </div>
+      </div>
+      <button type="button" class="apply" id="apply">Apply</button>
+      <div class="util">
+        <button type="button" class="ghost" id="undo">Undo</button>
+        <button type="button" class="ghost" id="reset">Reset</button>
+      </div>
+    </div>
+    <p class="hint">Type an integer, a negative such as −5, or a fraction such as 1/2. Division by 0 is not allowed.</p>
+  </section>
+
+  <details class="tip">
+    <summary>Teacher tip（教師提示，預設收起）</summary>
+    <div class="tip-body">
+      <p>Taking a 1 kg weight off both pans is the same as subtracting 1 from both sides. Halving both pans is the same as dividing both sides by 2 (or multiplying by 1/2).</p>
+      <p>After Activity 4.1, transposition of terms（移項）can be shown as a shorter way of writing that same both-sides step — not as a different rule, and not by dragging a term across the equals sign.</p>
+      <p>Today the class still centres on “the same operation on both sides”. If a student changes only one side, let the scale tip and ask what happened.</p>
+    </div>
+  </details>
+
+  <footer class="foot">
+    <p>馬Sir教室 · Form 1 · Ch.4 · No student data is collected.</p>
+    <p>Equations: KaTeX (MIT). Button press style inspired by Uiverse.io (MIT).</p>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- rationals ---------- */
+  function gcd(a, b) {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b) { var t = a % b; a = b; b = t; }
+    return a || 1;
+  }
+  function rat(n, d) {
+    if (d === undefined) d = 1;
+    if (d === 0) throw new Error("div0");
+    if (d < 0) { n = -n; d = -d; }
+    if (n === 0) d = 1;
+    var g = gcd(n, d);
+    return { n: n / g, d: d / g };
+  }
+  function rInt(n) { return rat(n, 1); }
+  function rAdd(a, b) { return rat(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function rSub(a, b) { return rat(a.n * b.d - b.n * a.d, a.d * b.d); }
+  function rMul(a, b) { return rat(a.n * b.n, a.d * b.d); }
+  function rDiv(a, b) {
+    if (b.n === 0) throw new Error("div0");
+    return rat(a.n * b.d, a.d * b.n);
+  }
+  function rEq(a, b) { return a.n === b.n && a.d === b.d; }
+  function rZero(a) { return a.n === 0; }
+  function rOne(a) { return a.n === 1 && a.d === 1; }
+  function rNegOne(a) { return a.n === -1 && a.d === 1; }
+  function rNeg(a) { return rat(-a.n, a.d); }
+  function rNum(a) { return a.n / a.d; }
+  function rClone(a) { return { n: a.n, d: a.d }; }
+  function rAbs(a) { return rat(Math.abs(a.n), a.d); }
+  function rIsInt(a) { return a.d === 1; }
+
+  function parseNum(s) {
+    if (s == null) return null;
+    s = String(s).trim().replace(/[−–—]/g, "-").replace(/[／]/g, "/").replace(/\s+/g, "");
+    if (!s || s === "-" || s === "+" || s === ".") return null;
+    if (s.indexOf("/") !== -1) {
+      var parts = s.split("/");
+      if (parts.length !== 2) return null;
+      var A = parseNum(parts[0]), B = parseNum(parts[1]);
+      if (!A || !B || B.n === 0) return null;
+      return rDiv(A, B);
+    }
+    if (!/^[+-]?(?:\d+|\d+\.\d*|\.\d+)$/.test(s)) return null;
+    if (s.indexOf(".") !== -1) {
+      var sign = s.charAt(0) === "-" ? -1 : 1;
+      var t = s.replace("-", "").replace("+", "");
+      var bits = t.split(".");
+      var i = bits[0] ? bits[0] : "0";
+      var f = bits[1] ? bits[1] : "";
+      if (f.length > 8) return null;
+      var den = Math.pow(10, f.length);
+      return rat(sign * (Number(i) * den + Number(f || "0")), den || 1);
+    }
+    var n = Number(s);
+    if (!isFinite(n) || !Number.isInteger(n)) return null;
+    return rInt(n);
+  }
+
+  function texRat(a, signed) {
+    var sign = a.n < 0 ? "-" : (signed ? "+" : "");
+    var n = Math.abs(a.n), d = a.d;
+    var body = d === 1 ? String(n) : "\\dfrac{" + n + "}{" + d + "}";
+    return sign + body;
+  }
+  function plainRat(a) {
+    if (a.d === 1) return (a.n < 0 ? "−" : "") + Math.abs(a.n);
+    return (a.n < 0 ? "−" : "") + Math.abs(a.n) + "/" + a.d;
+  }
+
+  /* ---------- expressions a*v + b ---------- */
+  function expr(a, b, hint) { return { a: a, b: b, hint: hint || null }; }
+  function eClone(e) { return { a: rClone(e.a), b: rClone(e.b), hint: e.hint || null }; }
+  function eEq(p, q) { return rEq(p.a, q.a) && rEq(p.b, q.b); }
+  function eEval(e, x) { return rAdd(rMul(e.a, x), e.b); }
+
+  function texExpr(e, v, keepHint) {
+    if (keepHint && e.hint) return e.hint;
+    var a = e.a, b = e.b, terms = [];
+    if (!rZero(a)) {
+      if (rOne(a)) terms.push(v);
+      else if (rNegOne(a)) terms.push("-" + v);
+      else if (rIsInt(a)) terms.push(texRat(a, false) + v);
+      else if (Math.abs(a.n) === 1) {
+        var sgn = a.n < 0 ? "-" : "";
+        terms.push(sgn + "\\dfrac{" + v + "}{" + a.d + "}");
+      } else {
+        var sgn2 = a.n < 0 ? "-" : "";
+        terms.push(sgn2 + "\\dfrac{" + Math.abs(a.n) + v + "}{" + a.d + "}");
+      }
+    }
+    if (!rZero(b)) {
+      if (terms.length === 0) terms.push(texRat(b, false));
+      else terms.push(texRat(b, true));
+    }
+    if (!terms.length) return "0";
+    return terms.join("");
+  }
+
+  function texPair(L, R, v, eq, keepHint) {
+    return texExpr(L, v, keepHint) + (eq ? " = " : " \\neq ") + texExpr(R, v, keepHint);
+  }
+
+  function applyTo(e, op, c) {
+    var out;
+    if (op === "add") out = expr(e.a, rAdd(e.b, c));
+    else if (op === "sub") out = expr(e.a, rSub(e.b, c));
+    else if (op === "mul") out = expr(rMul(e.a, c), rMul(e.b, c));
+    else if (op === "div") out = expr(rDiv(e.a, c), rDiv(e.b, c));
+    else throw new Error("op");
+    return out;
+  }
+
+  function solveRoot(L, R) {
+    var da = rSub(L.a, R.a);
+    var db = rSub(R.b, L.b);
+    if (rZero(da)) return null;
+    return rDiv(db, da);
+  }
+
+  function isIsolated(L, R) {
+    var leftUnit = rOne(L.a) && rZero(L.b) && rZero(R.a);
+    var rightUnit = rOne(R.a) && rZero(R.b) && rZero(L.a);
+    return leftUnit || rightUnit;
+  }
+  function isolatedValue(L, R) {
+    if (rOne(L.a) && rZero(L.b) && rZero(R.a)) return R.b;
+    if (rOne(R.a) && rZero(R.b) && rZero(L.a)) return L.b;
+    return null;
+  }
+
+  function opVerb(op, c, where) {
+    var verbs = { add: "Add", sub: "Subtract", mul: "Multiply", div: "Divide" };
+    var prep = (op === "mul" || op === "div") ? (op === "mul" ? "by" : "by") : "from";
+    if (op === "add") prep = "to";
+    var num = plainRat(c);
+    var target = where === "both" ? "both sides" : where === "left" ? "the L.H.S. only" : "the R.H.S. only";
+    if (op === "add") return "Add " + num + " to " + target + ".";
+    if (op === "sub") return "Subtract " + num + " from " + target + ".";
+    if (op === "mul") return "Multiply " + target + " by " + num + ".";
+    return "Divide " + target + " by " + num + ".";
+  }
+
+  function katexEl(el, tex, display) {
+    el.innerHTML = "";
+    if (window.katex) {
+      try {
+        window.katex.render(tex, el, { throwOnError: false, displayMode: !!display });
+        return;
+      } catch (err) { /* fall through */ }
+    }
+    el.textContent = tex;
+  }
+
+  /* ---------- problems ---------- */
+  function P(label, v, La, Lb, Ra, Rb, note, leftHint) {
+    return {
+      label: label,
+      v: v,
+      left: expr(La, Lb, leftHint || null),
+      right: expr(Ra, Rb),
+      note: note || ""
+    };
+  }
+
+  var GUIDED_START = P("Activity 4.1", "x", rInt(2), rInt(1), rInt(0), rInt(5), "");
+  var COMPARE = P(
+    "Teaching example",
+    "x",
+    rInt(1), rInt(5),
+    rInt(0), rInt(-19),
+    ""
+  );
+  var PRACTICE = [
+    P("Practice 1", "x", rInt(1), rInt(5), rInt(0), rInt(-19)),
+    P("Practice 2", "y", rat(1, 4), rInt(0), rInt(0), rInt(-9), "Note that y/4 is the same as y ÷ 4.", "\\dfrac{y}{4}"),
+    P("Practice 3", "x", rInt(1), rInt(8), rInt(0), rInt(2)),
+    P("Practice 4", "x", rInt(1), rInt(-11), rInt(0), rInt(-3)),
+    P("Practice 5", "y", rInt(-5), rInt(0), rInt(0), rInt(20)),
+    P("Practice 6", "y", rat(1, 3), rInt(0), rInt(0), rInt(-7), "", "\\dfrac{y}{3}"),
+    P("Practice 7", "x", rInt(1), rInt(15), rInt(0), rInt(7)),
+    P("Practice 8", "x", rInt(1), rInt(-13), rInt(0), rInt(-42)),
+    P("Practice 9", "y", rInt(6), rInt(0), rInt(0), rInt(-72)),
+    P("Practice 10", "y", rat(-1, 3), rInt(0), rInt(0), rInt(18), "The denominator is already negative.", "\\dfrac{y}{-3}")
+  ];
+
+  /* ---------- session state ---------- */
+  function freshProblem(prob) {
+    var L = eClone(prob.left), R = eClone(prob.right);
+    return {
+      v: prob.v,
+      originalL: eClone(prob.left),
+      originalR: eClone(prob.right),
+      left: L,
+      right: R,
+      root: solveRoot(L, R),
+      steps: [],
+      pending: null,
+      checkRevealed: false,
+      checkDone: false,
+      shorthandShown: false,
+      note: prob.note,
+      label: prob.label,
+      leftHintLive: !!prob.left.hint,
+      askedTwoX: false,
+      askedXTwo: false
+    };
+  }
+
+  function snapshot(ps) {
+    return JSON.stringify({
+      left: ps.left, right: ps.right, steps: ps.steps, pending: ps.pending,
+      checkRevealed: ps.checkRevealed, checkDone: ps.checkDone,
+      shorthandShown: ps.shorthandShown, leftHintLive: ps.leftHintLive,
+      askedTwoX: ps.askedTwoX, askedXTwo: ps.askedXTwo
+    });
+  }
+  function restore(ps, raw) {
+    var s = JSON.parse(raw);
+    ps.left = s.left; ps.right = s.right; ps.steps = s.steps; ps.pending = s.pending;
+    ps.checkRevealed = s.checkRevealed; ps.checkDone = s.checkDone;
+    ps.shorthandShown = s.shorthandShown; ps.leftHintLive = s.leftHintLive;
+    ps.askedTwoX = !!s.askedTwoX; ps.askedXTwo = !!s.askedXTwo;
+  }
+
+  var ui = {
+    mode: "guided",
+    op: "sub",
+    where: "both",
+    guidedPhase: "activity",
+    guided: freshProblem(GUIDED_START),
+    guidedHist: [],
+    compare: freshProblem(COMPARE),
+    compareHist: [],
+    practiceIndex: 0,
+    practice: freshProblem(PRACTICE[0]),
+    practiceHist: [],
+    practiceDone: PRACTICE.map(function () { return false; }),
+    msg: ""
+  };
+
+  function current() {
+    if (ui.mode === "practice") return ui.practice;
+    return ui.guidedPhase === "compare" ? ui.compare : ui.guided;
+  }
+  function currentHist() {
+    if (ui.mode === "practice") return "practiceHist";
+    return ui.guidedPhase === "compare" ? "compareHist" : "guidedHist";
+  }
+  function balanced(ps) {
+    if (!ps.root) return rEq(eEval(ps.left, rInt(0)), eEval(ps.right, rInt(0))) && rEq(ps.left.a, ps.right.a);
+    return rEq(eEval(ps.left, ps.root), eEval(ps.right, ps.root));
+  }
+  function tiltAngle(ps) {
+    if (balanced(ps)) return 0;
+    var root = ps.root || rInt(0);
+    var dv = rNum(eEval(ps.left, root)) - rNum(eEval(ps.right, root));
+    var deg = dv * 4;
+    if (Math.abs(deg) < 8) deg = deg < 0 ? -10 : 10;
+    if (deg > 18) deg = 18;
+    if (deg < -18) deg = -18;
+    return deg;
+  }
+
+  /* ---------- render pans ---------- */
+  function tokenBox(v, neg) {
+    var d = document.createElement("div");
+    d.className = "token-box" + (neg ? " is-neg" : "");
+    d.textContent = v;
+    d.setAttribute("aria-label", (neg ? "negative " : "") + "unknown " + v);
+    return d;
+  }
+  function tokenW() {
+    var d = document.createElement("div");
+    d.className = "token-w";
+    d.textContent = "1 kg";
+    d.setAttribute("aria-label", "1 kilogram weight");
+    return d;
+  }
+  function tokenNeg(txt) {
+    var d = document.createElement("div");
+    d.className = "token-neg";
+    d.textContent = txt;
+    return d;
+  }
+  function tokenCompact(txt) {
+    var d = document.createElement("div");
+    d.className = "token-compact";
+    d.textContent = txt;
+    return d;
+  }
+
+  function fillPan(el, e, v) {
+    el.innerHTML = "";
+    var a = e.a, b = e.b;
+    var simpleA = rIsInt(a) && Math.abs(a.n) >= 1 && Math.abs(a.n) <= 8;
+    var simpleBpos = rIsInt(b) && b.n >= 1 && b.n <= 12;
+    var simpleBzero = rZero(b);
+    var simpleBneg = rIsInt(b) && b.n <= -1 && b.n >= -8;
+    var used = false;
+    if (simpleA) {
+      used = true;
+      var n = Math.abs(a.n);
+      var neg = a.n < 0;
+      for (var i = 0; i < n; i++) el.appendChild(tokenBox(v, neg));
+    } else if (!rZero(a)) {
+      used = true;
+      el.appendChild(tokenCompact((a.n < 0 ? "−" : "") + (rOne(rAbs(a)) ? v : plainRat(rAbs(a)) + v)));
+    }
+    if (simpleBpos) {
+      used = true;
+      for (var j = 0; j < b.n; j++) el.appendChild(tokenW());
+    } else if (simpleBneg) {
+      used = true;
+      el.appendChild(tokenNeg((b.n < 0 ? "−" : "") + plainRat(rAbs(b)) + " kg"));
+    } else if (!simpleBzero && !simpleBpos) {
+      used = true;
+      el.appendChild(tokenNeg((b.n < 0 ? "−" : "") + plainRat(rAbs(b)) + " kg"));
+    }
+    if (!used) {
+      var s = document.createElement("div");
+      s.className = "pan-empty";
+      s.textContent = "empty";
+      el.appendChild(s);
+    }
+  }
+
+  /* ---------- check working ---------- */
+  function substTex(e, v, val, keepHint) {
+    var a = e.a, b = e.b;
+    var raw = texRat(val, false);
+    var wrapped = "\\left(" + raw + "\\right)";
+    var parts = [];
+    if (!rZero(a)) {
+      var hintNegDenom = !!(keepHint && e.hint && e.hint.indexOf("{-") !== -1);
+      if (hintNegDenom && Math.abs(a.n) === 1 && !rIsInt(a)) {
+        parts.push("\\dfrac{" + raw + "}{" + (a.n < 0 ? -a.d : a.d) + "}");
+      } else if (!rIsInt(a) && Math.abs(a.n) === 1) {
+        if (a.n > 0) parts.push("\\dfrac{" + raw + "}{" + a.d + "}");
+        else parts.push("-\\dfrac{" + raw + "}{" + a.d + "}");
+      } else if (rOne(a)) {
+        parts.push(val.n < 0 ? wrapped : raw);
+      } else if (rNegOne(a)) {
+        parts.push("-" + wrapped);
+      } else {
+        parts.push(texRat(a, false) + wrapped);
+      }
+    }
+    if (!rZero(b)) {
+      if (!parts.length) parts.push(texRat(b, false));
+      else parts.push(texRat(b, true));
+    }
+    if (!parts.length) return "0";
+    return parts.join("");
+  }
+
+  function checkLines(ps) {
+    var val = isolatedValue(ps.left, ps.right);
+    if (!val) return null;
+    var v = ps.v;
+    var L0 = ps.originalL, R0 = ps.originalR;
+    var lVal = eEval(L0, val), rVal = eEval(R0, val);
+    var lSub = substTex(L0, v, val, true);
+    var rSub = substTex(R0, v, val, true);
+    var lTex = texExpr(L0, v, true);
+    var rTex = texExpr(R0, v, true);
+    return {
+      val: val,
+      ok: rEq(lVal, rVal),
+      intro: "When " + v + " = " + plainRat(val) + ",",
+      introTex: "\\text{When }" + v + " = " + texRat(val, false) + ",",
+      lhs: "\\text{L.H.S.} = " + lSub + " = " + texRat(lVal, false),
+      rhs: "\\text{R.H.S.} = " + (rZero(R0.a) ? texRat(rVal, false) : (rSub + " = " + texRat(rVal, false))),
+      equal: rEq(lVal, rVal)
+    };
+  }
+
+  /* ---------- milestones (guided activity) ---------- */
+  function isTwoXEqualsFour(ps) {
+    var L = ps.left, R = ps.right;
+    var a = expr(rInt(2), rInt(0)), b = expr(rInt(0), rInt(4));
+    return (eEq(L, a) && eEq(R, b)) || (eEq(L, b) && eEq(R, a));
+  }
+  function isXEqualsTwo(ps) {
+    var val = isolatedValue(ps.left, ps.right);
+    return val && rEq(val, rInt(2));
+  }
+
+  /* ---------- DOM refs ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var promptEl = $("prompt");
+  var statusEl = $("eq-status");
+  var statusText = $("eq-status-text");
+  var scaleEl = $("scale");
+  var scaleView = $("scale-view");
+  var wbView = $("workbench-view");
+  var stageLabel = $("stage-label");
+  var eqNow = $("eq-now");
+  var stepsEl = $("steps");
+  var questionEl = $("question");
+  var checkEl = $("check");
+  var shorthandEl = $("shorthand");
+  var principleEl = $("principle");
+  var msgEl = $("msg");
+  var pickerEl = $("picker");
+  var numEl = $("num");
+
+  function showMsg(t) {
+    ui.msg = t || "";
+    if (!t) { msgEl.hidden = true; msgEl.textContent = ""; return; }
+    msgEl.hidden = false;
+    msgEl.textContent = t;
+  }
+
+  function setStatus(eq) {
+    statusEl.className = "status " + (eq ? "eq" : "uneq");
+    statusText.textContent = eq ? "in equilibrium（平衡）" : "not in equilibrium（不平衡）";
+  }
+
+  function useScale(yes) {
+    scaleView.hidden = !yes;
+    wbView.hidden = yes;
+    stageLabel.textContent = yes ? "Balance scale（天秤）" : "Equation workbench（方程工作臺）";
+  }
+
+  function renderSteps(ps) {
+    stepsEl.innerHTML = "";
+    if (!ps.steps.length) {
+      var li0 = document.createElement("li");
+      li0.className = "empty";
+      li0.textContent = "No steps yet. Choose an operation, a number, and where to apply it.";
+      stepsEl.appendChild(li0);
+      return;
+    }
+    ps.steps.forEach(function (s) {
+      var li = document.createElement("li");
+      var op = document.createElement("span");
+      op.className = "op";
+      op.textContent = s.log;
+      var eq = document.createElement("div");
+      if (s.hideEq) {
+        eq.textContent = "…";
+      } else {
+        katexEl(eq, s.tex, false);
+      }
+      li.appendChild(op);
+      li.appendChild(eq);
+      stepsEl.appendChild(li);
+    });
+    stepsEl.scrollTop = stepsEl.scrollHeight;
+  }
+
+  function renderQuestion(ps) {
+    if (!ps.pending) { questionEl.hidden = true; questionEl.innerHTML = ""; return; }
+    questionEl.hidden = false;
+    questionEl.innerHTML = "";
+    var p = document.createElement("p");
+    p.textContent = "Is the balance still in equilibrium?（天秤仍然平衡嗎？）";
+    var actions = document.createElement("div");
+    actions.className = "q-actions";
+    var yes = document.createElement("button");
+    yes.type = "button"; yes.className = "yesno primary"; yes.textContent = "Yes";
+    var no = document.createElement("button");
+    no.type = "button"; no.className = "yesno"; no.textContent = "No";
+    yes.addEventListener("click", function () { answerPending(true); });
+    no.addEventListener("click", function () { answerPending(false); });
+    actions.appendChild(yes); actions.appendChild(no);
+    questionEl.appendChild(p); questionEl.appendChild(actions);
+  }
+
+  function answerPending(saidYes) {
+    var ps = current();
+    if (!ps.pending) return;
+    pushHist();
+    var tex = ps.pending.tex;
+    var note = saidYes
+      ? "Yes — it is still in equilibrium. So we may write the new equation."
+      : "Look at the scale: both pans are still level, so it is still in equilibrium. Then we may write the new equation.";
+    ps.steps.push({ log: note, tex: tex, hideEq: false });
+    ps.pending = null;
+    showMsg("");
+    render();
+  }
+
+  function renderCheck(ps) {
+    checkEl.innerHTML = "";
+    var can = isIsolated(ps.left, ps.right) && balanced(ps) && !ps.pending;
+    if (!can) { checkEl.hidden = true; return; }
+    checkEl.hidden = false;
+    var h = document.createElement("h2");
+    h.textContent = "Checking（檢驗）";
+    checkEl.appendChild(h);
+    if (!ps.checkRevealed) {
+      var p = document.createElement("p");
+      p.textContent = "The unknown is now alone. Check with the original equation before you finish.";
+      checkEl.appendChild(p);
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "yesno primary"; b.textContent = "Check L.H.S. / R.H.S.";
+      b.addEventListener("click", function () {
+        pushHist();
+        ps.checkRevealed = true;
+        var lines = checkLines(ps);
+        if (lines && lines.ok) {
+          if (ui.mode === "practice") ui.practiceDone[ui.practiceIndex] = true;
+          if (ui.mode === "guided" && ui.guidedPhase === "activity") ps.checkDone = true;
+          if (ui.mode === "guided" && ui.guidedPhase === "compare") ps.checkDone = true;
+        }
+        render();
+      });
+      checkEl.appendChild(b);
+      return;
+    }
+    var lines = checkLines(ps);
+    var body = document.createElement("div");
+    body.className = "check-body";
+    if (!lines) { body.textContent = "Check is not available yet."; checkEl.appendChild(body); return; }
+    var p1 = document.createElement("p"); katexEl(p1, lines.introTex, false);
+    var p2 = document.createElement("p"); katexEl(p2, lines.lhs, false);
+    var p3 = document.createElement("p"); katexEl(p3, lines.rhs, false);
+    body.appendChild(p1); body.appendChild(p2); body.appendChild(p3);
+    if (lines.ok) {
+      var ok = document.createElement("p");
+      ok.className = "check-ok";
+      ok.textContent = "L.H.S. = R.H.S.  The solution checks.";
+      body.appendChild(ok);
+      ps.checkDone = true;
+      if (ui.mode === "practice") ui.practiceDone[ui.practiceIndex] = true;
+    } else {
+      var bad = document.createElement("p");
+      bad.textContent = "L.H.S. and R.H.S. do not match. Undo and try another operation.";
+      body.appendChild(bad);
+    }
+    checkEl.appendChild(body);
+
+    if (ui.mode === "guided" && ui.guidedPhase === "activity" && lines && lines.ok) {
+      var next = document.createElement("button");
+      next.type = "button";
+      next.className = "apply";
+      next.style.marginTop = "10px";
+      next.textContent = "Continue — a shorter way to write this";
+      next.addEventListener("click", function () {
+        ui.guidedPhase = "compare";
+        ui.compare = freshProblem(COMPARE);
+        ui.compareHist = [];
+        ui.op = "sub";
+        document.querySelectorAll(".op-btn").forEach(function (b) {
+          b.setAttribute("aria-pressed", b.getAttribute("data-op") === "sub" ? "true" : "false");
+        });
+        numEl.value = "5";
+        showMsg("");
+        render();
+      });
+      checkEl.appendChild(next);
+    }
+    if (ui.mode === "practice" && lines && lines.ok && ui.practiceIndex < PRACTICE.length - 1) {
+      var nx = document.createElement("button");
+      nx.type = "button";
+      nx.className = "apply";
+      nx.style.marginTop = "10px";
+      nx.textContent = "Next practice";
+      nx.addEventListener("click", function () { loadPractice(ui.practiceIndex + 1); });
+      checkEl.appendChild(nx);
+    }
+  }
+
+  function renderShorthand(ps) {
+    shorthandEl.innerHTML = "";
+    principleEl.innerHTML = "";
+    principleEl.hidden = true;
+    if (!(ui.mode === "guided" && ui.guidedPhase === "compare")) {
+      shorthandEl.hidden = true;
+      return;
+    }
+    var ready = isIsolated(ps.left, ps.right) && balanced(ps) && !ps.pending;
+    if (!ready && !ps.shorthandShown) { shorthandEl.hidden = true; return; }
+    shorthandEl.hidden = false;
+    if (!ps.shorthandShown) {
+      var h = document.createElement("h2");
+      h.textContent = "A shorter way to write the same step";
+      var p = document.createElement("p");
+      p.textContent = "You have left x alone by doing the same operation on both sides. The same work can be written more shortly.";
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "yesno primary";
+      b.textContent = "Show transposition of terms（移項）";
+      b.addEventListener("click", function () {
+        pushHist();
+        ps.shorthandShown = true;
+        render();
+      });
+      shorthandEl.appendChild(h); shorthandEl.appendChild(p); shorthandEl.appendChild(b);
+      return;
+    }
+    var h2 = document.createElement("h2");
+    h2.textContent = "Transposition of terms（移項）";
+    shorthandEl.appendChild(h2);
+    var p0 = document.createElement("p");
+    p0.textContent = "Both-sides method（兩邊同一運算）:";
+    var e0 = document.createElement("p");
+    katexEl(e0, "x + 5 - 5 = -19 - 5 \\quad \\Rightarrow \\quad x = -24", false);
+    var p1 = document.createElement("p");
+    p1.textContent = "Shorthand: move +5 to the R.H.S., where it becomes −5.";
+    var e1 = document.createElement("p");
+    katexEl(e1, "x = -19 - 5 \\quad \\Rightarrow \\quad x = -24", false);
+    var p2 = document.createElement("p");
+    p2.innerHTML = "Transposition of terms（移項）is only a <strong>short way of writing</strong> the same principle — not a different rule.";
+    shorthandEl.appendChild(p0); shorthandEl.appendChild(e0);
+    shorthandEl.appendChild(p1); shorthandEl.appendChild(e1);
+    shorthandEl.appendChild(p2);
+
+    principleEl.hidden = false;
+    var pp = document.createElement("p");
+    pp.innerHTML = "<strong>Principle（原理）</strong> — The values on both sides remain equal when the same operation is performed on both sides.";
+    var pp2 = document.createElement("p");
+    katexEl(pp2, "\\text{If } a=b,\\ \\text{then } a+c=b+c,\\ a-c=b-c,\\ ac=bc,\\ \\dfrac{a}{c}=\\dfrac{b}{c}\\ (c\\neq 0).", false);
+    principleEl.appendChild(pp); principleEl.appendChild(pp2);
+  }
+
+  function renderPicker() {
+    if (ui.mode !== "practice") { pickerEl.hidden = true; pickerEl.innerHTML = ""; return; }
+    pickerEl.hidden = false;
+    pickerEl.innerHTML = "";
+    PRACTICE.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = String(i + 1);
+      b.setAttribute("aria-label", p.label);
+      if (ui.practiceDone[i]) b.classList.add("is-done");
+      if (i === ui.practiceIndex) b.setAttribute("aria-current", "true");
+      b.addEventListener("click", function () { loadPractice(i); });
+      pickerEl.appendChild(b);
+    });
+  }
+
+  function promptText(ps) {
+    if (ui.mode === "practice") {
+      var base = "Solve the equation. Choose an operation and apply it to both sides (you may try one side to see that the two sides are then not equal). After the unknown is alone, check L.H.S. / R.H.S. with the original equation.";
+      if (ps.note) return ps.note + " " + base;
+      return base;
+    }
+    if (ui.guidedPhase === "compare") {
+      if (ps.shorthandShown) return "Compare the two writings. They give the same solution because transposition is only a short way to write “do the same on both sides”.";
+      if (isIsolated(ps.left, ps.right) && balanced(ps)) return "You used the both-sides method. Next, see the shorter writing of the same step, and check L.H.S. / R.H.S.";
+      return "Now try the same both-sides method on x + 5 = −19. First leave x alone by subtracting 5 from both sides — then we will look at a shorter way to write that step.";
+    }
+    if (ps.pending) return "The pans have changed. Before we write a new equation, decide: is the balance still in equilibrium?";
+    if (ps.checkDone) return "The original scale matches the check 2(2) + 1 = 5. Continue when you are ready to see a shorter way of writing a both-sides step.";
+    if (isIsolated(ps.left, ps.right) && balanced(ps)) return "One x-box is now alone, and the scale is still in equilibrium. Check this value in the original equation 2x + 1 = 5.";
+    if (!balanced(ps)) return "The scale is not in equilibrium. If you change only one side, the two sides are no longer equal. Try Undo, then apply the same operation to both sides.";
+    if (!ps.steps.length) return "The scale is in equilibrium. It represents the equation 2x + 1 = 5: two identical x-boxes and a 1 kg weight on the left, five 1 kg weights on the right. Choose an operation — and decide whether to apply it to both sides, or to one side only.";
+    if (isTwoXEqualsFour(ps)) return "Both pans still balance: two x-boxes on the left and 4 kg on the right. How can you find the mass of one x-box? (You may divide both sides by 2, or multiply both sides by 1/2.)";
+    return "Keep going. The same operation on both sides leaves the scale in equilibrium.";
+  }
+
+  function renderWorkbench(ps) {
+    katexEl($("wb-left"), texExpr(ps.left, ps.v, ps.leftHintLive), false);
+    katexEl($("wb-right"), texExpr(ps.right, ps.v, false), false);
+    var eq = balanced(ps);
+    var sign = $("wb-sign");
+    sign.textContent = eq ? "=" : "≠";
+    sign.className = "wb-sign" + (eq ? "" : " uneq");
+  }
+
+  function render() {
+    var ps = current();
+    var eq = balanced(ps);
+    setStatus(eq);
+    var showScale = ui.mode === "guided" && ui.guidedPhase === "activity";
+    useScale(showScale);
+    if (showScale) {
+      scaleEl.style.setProperty("--tilt", tiltAngle(ps) + "deg");
+      fillPan($("pan-left"), ps.left, ps.v);
+      fillPan($("pan-right"), ps.right, ps.v);
+    } else {
+      renderWorkbench(ps);
+    }
+
+    var showEq = !ps.pending;
+    if (showEq) katexEl(eqNow, texPair(ps.left, ps.right, ps.v, eq, ps.leftHintLive), false);
+    else {
+      eqNow.textContent = "";
+      var wait = document.createElement("span");
+      wait.style.color = "var(--muted)";
+      wait.style.fontSize = "15px";
+      wait.textContent = "Answer the equilibrium question first, then the new equation will be written here.";
+      eqNow.appendChild(wait);
+    }
+
+    renderSteps(ps);
+    renderQuestion(ps);
+    renderCheck(ps);
+    renderShorthand(ps);
+    renderPicker();
+    promptEl.textContent = promptText(ps);
+    if (ui.msg) { msgEl.hidden = false; msgEl.textContent = ui.msg; }
+    else msgEl.hidden = true;
+
+    $("mode-guided").setAttribute("aria-pressed", ui.mode === "guided" ? "true" : "false");
+    $("mode-practice").setAttribute("aria-pressed", ui.mode === "practice" ? "true" : "false");
+    $("undo").disabled = ui[currentHist()].length === 0;
+  }
+
+  function pushHist() {
+    var key = currentHist();
+    ui[key].push(snapshot(current()));
+    if (ui[key].length > 40) ui[key].shift();
+  }
+
+  function undo() {
+    var key = currentHist();
+    if (!ui[key].length) return;
+    restore(current(), ui[key].pop());
+    showMsg("");
+    render();
+  }
+
+  function resetCurrent() {
+    if (ui.mode === "practice") loadPractice(ui.practiceIndex);
+    else if (ui.guidedPhase === "compare") {
+      ui.compare = freshProblem(COMPARE);
+      ui.compareHist = [];
+      showMsg("");
+      render();
+    } else {
+      ui.guided = freshProblem(GUIDED_START);
+      ui.guidedHist = [];
+      ui.guidedPhase = "activity";
+      showMsg("");
+      render();
+    }
+  }
+
+  function loadPractice(i) {
+    ui.practiceIndex = i;
+    ui.practice = freshProblem(PRACTICE[i]);
+    ui.practiceHist = [];
+    showMsg("");
+    render();
+  }
+
+  function maybeMilestone(ps, where) {
+    if (!(ui.mode === "guided" && ui.guidedPhase === "activity")) return false;
+    if (where !== "both") return false;
+    if (!balanced(ps)) return false;
+    if (isTwoXEqualsFour(ps) && !ps.askedTwoX) {
+      ps.askedTwoX = true;
+      ps.pending = { tex: texPair(ps.left, ps.right, ps.v, true, false) };
+      return true;
+    }
+    if (isXEqualsTwo(ps) && !ps.askedXTwo) {
+      ps.askedXTwo = true;
+      ps.pending = { tex: texPair(ps.left, ps.right, ps.v, true, false) };
+      return true;
+    }
+    return false;
+  }
+
+  function applyOp() {
+    var ps = current();
+    if (ps.pending) {
+      showMsg("Answer the equilibrium question first.");
+      render();
+      return;
+    }
+    var c = parseNum(numEl.value);
+    if (!c) {
+      showMsg("Enter a number first. You may type 1/2 or −3.");
+      render();
+      return;
+    }
+    if (ui.op === "div" && rZero(c)) {
+      showMsg("You cannot divide by 0.（不能除以 0。）");
+      render();
+      return;
+    }
+    try {
+      var newL = eClone(ps.left), newR = eClone(ps.right);
+      if (ui.where === "both" || ui.where === "left") newL = applyTo(ps.left, ui.op, c);
+      if (ui.where === "both" || ui.where === "right") newR = applyTo(ps.right, ui.op, c);
+      var zeroWarn = (ui.op === "mul" && rZero(c));
+      pushHist();
+      ps.left = newL;
+      ps.right = newR;
+      if (ui.where === "left" || ui.where === "both") ps.leftHintLive = false;
+      ps.checkRevealed = false;
+      ps.checkDone = false;
+      var log = opVerb(ui.op, c, ui.where);
+      var holdEq = maybeMilestone(ps, ui.where);
+      ps.steps.push({
+        log: log,
+        tex: texPair(ps.left, ps.right, ps.v, balanced(ps), false),
+        hideEq: holdEq
+      });
+      if (zeroWarn) showMsg("Multiplying by 0 makes both sides 0 and the unknown disappears. Choose another number, or press Undo.");
+      else showMsg("");
+      render();
+    } catch (err) {
+      if (err && err.message === "div0") showMsg("You cannot divide by 0.（不能除以 0。）");
+      else showMsg("That operation could not be applied. Try another number.");
+      render();
+    }
+  }
+
+  /* ---------- controls ---------- */
+  document.querySelectorAll(".op-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      ui.op = btn.getAttribute("data-op");
+      document.querySelectorAll(".op-btn").forEach(function (b) {
+        b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+      });
+    });
+  });
+  document.querySelectorAll(".where-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      ui.where = btn.getAttribute("data-where");
+      document.querySelectorAll(".where-btn").forEach(function (b) {
+        b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+      });
+    });
+  });
+
+  var CHIP_VALS = ["1", "2", "3", "4", "5", "6", "1/2", "−3", "−5"];
+  var chips = $("chips");
+  CHIP_VALS.forEach(function (v) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip";
+    b.textContent = v;
+    b.addEventListener("click", function () {
+      numEl.value = v === "−3" ? "-3" : v === "−5" ? "-5" : v;
+      chips.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+      numEl.focus();
+    });
+    chips.appendChild(b);
+  });
+  numEl.addEventListener("input", function () {
+    chips.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+  });
+  numEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); applyOp(); }
+  });
+
+  $("apply").addEventListener("click", applyOp);
+  $("undo").addEventListener("click", undo);
+  $("reset").addEventListener("click", resetCurrent);
+  $("mode-guided").addEventListener("click", function () {
+    ui.mode = "guided";
+    showMsg("");
+    render();
+  });
+  $("mode-practice").addEventListener("click", function () {
+    ui.mode = "practice";
+    showMsg("");
+    render();
+  });
+
+  /* self-check (console only) */
+  function selfCheck() {
+    var warns = [];
+    var p = freshProblem(GUIDED_START);
+    if (!rEq(p.root, rInt(2))) warns.push("root");
+    p.left = applyTo(p.left, "sub", rInt(1));
+    p.right = applyTo(p.right, "sub", rInt(1));
+    if (!isTwoXEqualsFour(p) || !balanced(p)) warns.push("step1");
+    p.left = applyTo(p.left, "div", rInt(2));
+    p.right = applyTo(p.right, "div", rInt(2));
+    if (!isXEqualsTwo(p) || !isIsolated(p.left, p.right)) warns.push("step2div");
+    var q = freshProblem(GUIDED_START);
+    q.left = applyTo(q.left, "sub", rInt(1));
+    q.right = applyTo(q.right, "sub", rInt(1));
+    q.left = applyTo(q.left, "mul", rat(1, 2));
+    q.right = applyTo(q.right, "mul", rat(1, 2));
+    if (!isXEqualsTwo(q)) warns.push("step2half");
+    var u = freshProblem(GUIDED_START);
+    u.left = applyTo(u.left, "sub", rInt(1));
+    if (balanced(u)) warns.push("oneside should tip");
+    if (!(tiltAngle(u) < 0)) warns.push("tilt direction (left lighter after removing 1 should raise the left pan)");
+    PRACTICE.forEach(function (item, i) {
+      var s = freshProblem(item);
+      if (!s.root) { warns.push("no root " + i); return; }
+      /* apply inverse of constant or scale toward isolation is tested via roots only */
+      var val;
+      /* jump to isolated by construction: left 1*v, right const = root */
+      s.left = expr(rInt(1), rInt(0));
+      s.right = expr(rInt(0), s.root);
+      var ch = checkLines(s);
+      if (!ch || !ch.ok) warns.push("check " + item.label);
+    });
+    /* compare equation root */
+    var c = freshProblem(COMPARE);
+    if (!rEq(c.root, rInt(-24))) warns.push("compare root");
+    if (warns.length) console.warn("Both sides self-check:", warns);
+    else console.log("Both sides self-check: ok");
+    return warns;
+  }
+
+  render();
+  selfCheck();
+})();
+</script>
+</body>
+</html>
