@@ -1102,7 +1102,9 @@ details.tip p:last-child { margin: 0; }
   function tiltAngle(ps) {
     if (balanced(ps)) return 0;
     var root = ps.root || rInt(0);
-    var dv = rNum(eEval(ps.left, root)) - rNum(eEval(ps.right, root));
+    /* CSS rotate is clockwise-positive. Pans sit above the beam pivot,
+       so clockwise raises the left pan (lighter side goes up). */
+    var dv = rNum(eEval(ps.right, root)) - rNum(eEval(ps.left, root));
     var deg = dv * 4;
     if (Math.abs(deg) < 8) deg = deg < 0 ? -10 : 10;
     if (deg > 18) deg = 18;
@@ -1721,7 +1723,16 @@ details.tip p:last-child { margin: 0; }
     var u = freshProblem(GUIDED_START);
     u.left = applyTo(u.left, "sub", rInt(1));
     if (balanced(u)) warns.push("oneside should tip");
-    if (!(tiltAngle(u) < 0)) warns.push("tilt direction (left lighter after removing 1 should raise the left pan)");
+    if (!(tiltAngle(u) > 0)) warns.push("tilt: LHS minus 1 should raise left pan (clockwise / positive)");
+    var addL = freshProblem(GUIDED_START);
+    addL.left = applyTo(addL.left, "add", rInt(1));
+    if (!(tiltAngle(addL) < 0)) warns.push("tilt: LHS plus 1 should lower left pan");
+    var subR = freshProblem(GUIDED_START);
+    subR.right = applyTo(subR.right, "sub", rInt(1));
+    if (!(tiltAngle(subR) < 0)) warns.push("tilt: RHS minus 1 should lower left / raise right");
+    var addR = freshProblem(GUIDED_START);
+    addR.right = applyTo(addR.right, "add", rInt(1));
+    if (!(tiltAngle(addR) > 0)) warns.push("tilt: RHS plus 1 should raise left / lower right");
     PRACTICE.forEach(function (item, i) {
       var s = freshProblem(item);
       if (!s.root) { warns.push("no root " + i); return; }
